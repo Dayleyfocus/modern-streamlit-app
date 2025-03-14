@@ -4,7 +4,7 @@ Dashboard feature for the Streamlit application.
 import streamlit as st
 import pandas as pd
 import numpy as np
-from ...core.utils import create_chart, get_sample_data
+from core.utils import create_chart, get_sample_data
 
 
 def render():

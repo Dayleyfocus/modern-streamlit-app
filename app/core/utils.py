@@ -10,13 +10,13 @@ import os
 
 def load_css():
     """Load custom CSS from config."""
-    from ..config import CUSTOM_CSS
+    from config import CUSTOM_CSS
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 def set_page_config():
     """Configure the Streamlit page settings."""
-    from ..config import APP_TITLE, APP_ICON, THEME
+    from config import APP_TITLE, APP_ICON, THEME
     
     st.set_page_config(
         page_title=APP_TITLE,
@@ -106,6 +106,6 @@ def get_sample_data():
 
 def feature_toggle(feature_name):
     """Check if a feature is enabled in the config."""
-    from ..config import FEATURES
+    from config import FEATURES
     feature = FEATURES.get(feature_name, {})
     return feature.get('enabled', False) 

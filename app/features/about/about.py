@@ -2,7 +2,7 @@
 About page feature for the Streamlit application.
 """
 import streamlit as st
-from ...core.utils import load_image
+from core.utils import load_image
 
 
 def render():
