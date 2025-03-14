@@ -10,13 +10,13 @@ import os
 
 def load_css():
     """Load custom CSS from config."""
-    from app.config import CUSTOM_CSS
+    from ..config import CUSTOM_CSS
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 def set_page_config():
     """Configure the Streamlit page settings."""
-    from app.config import APP_TITLE, APP_ICON, THEME
+    from ..config import APP_TITLE, APP_ICON, THEME
     
     st.set_page_config(
         page_title=APP_TITLE,
@@ -51,8 +51,11 @@ def load_image(image_path):
         image = Image.open(os.path.join(base_path, 'static', 'images', image_path))
         return image
     except Exception as e:
+        # Use a placeholder if the image can't be loaded
         st.error(f"Error loading image: {e}")
-        return None
+        # Create a simple colored placeholder image
+        placeholder = Image.new('RGB', (300, 200), color=(240, 240, 240))
+        return placeholder
 
 
 def create_chart(data, chart_type='bar', x=None, y=None, color=None, title=None):
@@ -103,6 +106,6 @@ def get_sample_data():
 
 def feature_toggle(feature_name):
     """Check if a feature is enabled in the config."""
-    from app.config import FEATURES
+    from ..config import FEATURES
     feature = FEATURES.get(feature_name, {})
     return feature.get('enabled', False) 

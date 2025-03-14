@@ -4,11 +4,11 @@ Main entry point for the Streamlit application.
 import streamlit as st
 from streamlit_option_menu import option_menu
 import hydralit_components as hc
-from app.config import FEATURES, APP_TITLE, APP_ICON
-from app.core.utils import set_page_config, load_css, create_footer
-from app.features.home import home
-from app.features.dashboard import dashboard
-from app.features.about import about
+from config import FEATURES, APP_TITLE, APP_ICON
+from core.utils import set_page_config, load_css, create_footer
+from features.home import home
+from features.dashboard import dashboard
+from features.about import about
 
 
 def main():
@@ -60,7 +60,7 @@ def main():
         st.markdown("---")
         st.markdown("### Theme")
         
-        # Use simpler theme selector with radio buttons instead of hydralit
+        # Use simpler theme selector with radio buttons 
         theme_mode = st.radio(
             "Select theme:",
             ["Light", "Dark"],
