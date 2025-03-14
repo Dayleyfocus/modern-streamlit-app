@@ -47,8 +47,23 @@ def create_footer():
 def load_image(image_path):
     """Load an image from the static directory."""
     try:
+        # Get the app directory path
         base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        image = Image.open(os.path.join(base_path, 'static', 'images', image_path))
+        
+        # If the path doesn't already include 'static/images', add it
+        if not image_path.startswith(('static/', '/static/', 'app/static/')):
+            image_path = os.path.join('static', 'images', image_path)
+        
+        # Construct the absolute path
+        absolute_path = os.path.join(base_path, image_path)
+        
+        # Check if file exists
+        if not os.path.exists(absolute_path):
+            st.warning(f"Image not found: {image_path}")
+            return Image.new('RGB', (300, 200), color=(240, 240, 240))
+            
+        # Open the image
+        image = Image.open(absolute_path)
         return image
     except Exception as e:
         # Use a placeholder if the image can't be loaded

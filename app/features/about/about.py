@@ -81,8 +81,11 @@ def render():
     
     with col2:
         # About image
-        image = load_image("about_illustration.png")
-        st.image(image, use_column_width=True)
+        try:
+            image = load_image("about_illustration.png")
+            st.image(image, use_column_width=True)
+        except Exception as e:
+            st.info("📷 Image placeholder: Illustration showing the app architecture")
         
         # Tech stack badges
         st.markdown("### Tech Stack")

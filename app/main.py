@@ -29,7 +29,13 @@ def main():
     
     # Sidebar configuration
     with st.sidebar:
-        st.image("static/images/logo.png", width=100)
+        # Use absolute path for the logo image
+        logo_path = os.path.join(current_dir, "static", "images", "logo.png")
+        try:
+            st.image(logo_path, width=100)
+        except Exception as e:
+            st.write(f"**{APP_TITLE}**")  # Fallback if image isn't found
+            
         st.markdown(f"# {APP_TITLE}")
         st.markdown("---")
         
