@@ -1,6 +1,14 @@
 """
 Main entry point for the Streamlit application.
 """
+import os
+import sys
+
+# Add app directory to path - this is crucial for resolving imports when running from different directories
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
 import streamlit as st
 from streamlit_option_menu import option_menu
 import hydralit_components as hc
@@ -12,85 +20,63 @@ from features.about import about
 
 
 def main():
-    """Main application entry point."""
-    # Initialize session state for active page
-    if 'active_page' not in st.session_state:
-        st.session_state.active_page = "home"
-    
-    # Set page config
+    """Render the main application."""
+    # Set page configuration
     set_page_config()
     
     # Load custom CSS
     load_css()
     
-    # Create header with logo and title
-    st.markdown(f"<h1 style='text-align: center;'>{APP_ICON} {APP_TITLE}</h1>", unsafe_allow_html=True)
-    
-    # Create sidebar navigation using option_menu with icons
+    # Sidebar configuration
     with st.sidebar:
-        # Create a list of enabled features
-        enabled_features = [
-            (feature_id, feature['name'], feature['icon'], feature['order'])
-            for feature_id, feature in FEATURES.items()
-            if feature['enabled']
-        ]
+        st.image("static/images/logo.png", width=100)
+        st.markdown(f"# {APP_TITLE}")
+        st.markdown("---")
         
-        # Sort by order
-        enabled_features.sort(key=lambda x: x[3])
-        
-        # Extract data for menu
-        feature_ids = [f[0] for f in enabled_features]
-        feature_names = [f[1] for f in enabled_features]
-        feature_icons = [f[2] for f in enabled_features]
-        
-        # Create the menu
-        selected = option_menu(
+        # Navigation menu
+        selected_feature = option_menu(
             menu_title="Navigation",
-            options=feature_names,
-            icons=feature_icons,
+            options=["Home", "Dashboard", "About"],
+            icons=["house", "graph-up", "info-circle"],
             menu_icon="list",
-            default_index=feature_ids.index(st.session_state.active_page) if st.session_state.active_page in feature_ids else 0,
+            default_index=0,
+            orientation="vertical"
         )
         
-        # Update session state based on selection
-        selected_index = feature_names.index(selected)
-        st.session_state.active_page = feature_ids[selected_index]
-        
-        # Information section
+        # Theme selector
         st.markdown("---")
         st.markdown("### Theme")
+        theme_options = {
+            "Light": "light",
+            "Dark": "dark",
+            "Blue": "blue",
+        }
         
-        # Use simpler theme selector with radio buttons 
-        theme_mode = st.radio(
-            "Select theme:",
-            ["Light", "Dark"],
+        # Use streamlit's native radio button for theme selection instead of hydralit_components
+        selected_theme = st.radio(
+            "Select Theme",
+            options=list(theme_options.keys()),
+            label_visibility="collapsed",
             horizontal=True,
-            label_visibility="collapsed"
+            index=0
         )
         
-        # Store theme selection in session state
-        st.session_state.theme = theme_mode.lower()
-        
-        # Information
-        with st.expander("About This App", expanded=False):
-            st.write("""
-            This is a modern Streamlit application with a modular, feature-based architecture.
-            Navigate through different features using the menu above.
-            """)
+        # Here we would typically set the theme based on selection
+        # This is just for UI demonstration
+        st.markdown(f"Selected: {selected_theme}")
     
-    # Render the active feature
-    if st.session_state.active_page == "home":
+    # Main content area - render the selected feature
+    if selected_feature == "Home":
         home.render()
-    elif st.session_state.active_page == "dashboard":
+    elif selected_feature == "Dashboard":
         dashboard.render()
-    elif st.session_state.active_page == "about":
+    elif selected_feature == "About":
         about.render()
-    else:
-        st.error(f"Unknown feature: {st.session_state.active_page}")
     
-    # Create footer
+    # Add footer
     create_footer()
 
 
+# When the script is run directly, execute the main function
 if __name__ == "__main__":
     main() 
