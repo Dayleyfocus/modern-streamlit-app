@@ -1,4 +1,4 @@
 """
 About feature package.
 """
-from app.features.about.about import render 
+from .about import render 
